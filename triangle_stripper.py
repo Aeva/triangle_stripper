@@ -23,6 +23,8 @@ class Demo:
         self.w = self.screen.get_width()
         self.h = self.screen.get_height()
 
+        self.font = pygame.font.SysFont(None, self.h // 4)
+
         self.y_margin = self.h * .4
         self.x_margin = self.h * .05
         self.x_span = self.w - (self.x_margin * 2)
@@ -145,6 +147,22 @@ class Demo:
                 pygame.draw.polygon(self.screen, self.shape_colors[i], points)
 
         if self.mode == Mode.STRIP:
+            surface = self.font.render(str(len(self.a_line)), True, (0, 0, 0))
+            x = (self.w - surface.get_width()) * .5
+            y = (self.y_margin - surface.get_height()) * .5
+            self.screen.blit(surface, (x, y))
+
+            surface = self.font.render(str(len(self.b_line)), True, (0, 0, 0))
+            x = (self.w - surface.get_width()) * .5
+            y = self.h - (self.y_margin + surface.get_height()) * .5
+            self.screen.blit(surface, (x, y))
+
+            for x, y in self.a_line:
+                pygame.draw.circle(self.screen, (0, 0, 0), (x, y - self.radius), 4)
+
+            for x, y in self.b_line:
+                pygame.draw.circle(self.screen, (0, 0, 0), (x, y + self.radius), 4)
+
             for line in [self.a_line, self.b_line]:
                 if len(line) > 1:
                     pygame.draw.line(self.screen, self.bg, line[0], line[-1], 8)
